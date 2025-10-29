@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Interactive Periodic Table</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	text-align: center;
+	padding: 20px;
+	background-color: #f0f0f0;
+}
+
+h2 {
+	margin-bottom: 20px;
+	color: #333;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0 auto;
+}
+
+td {
+	width: 60px;
+	height: 60px;
+	border: 1px solid #333;
+	text-align: center;
+	vertical-align: middle;
+	padding: 5px;
+	background-color: #fff;
+	font-weight: bold;
+	transition: 0.3s;
+	position: relative;
+}
+
+td:hover {
+	background-color: #ffeb3b;
+	cursor: pointer;
+}
+
+.element-symbol {
+	font-size: 18px;
+	display: block;
+}
+
+.element-number {
+	font-size: 12px;
+	display: block;
+}
+
+.back-btn {
+	margin-top: 20px;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 8px;
+	border: none;
+	background-color: #28a745;
+	color: white;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.back-btn:hover {
+	background-color: #1e7e34;
+}
+</style>
+</head>
+<button class="back-btn" onclick="goBackToDashboard()">⬅ Back to Dashboard</button>
+
+<script>
+  function goBackToDashboard() {
+    // Change the link below to match your actual dashboard URL or page
+    window.location.href = "dashboard.html";
+  }
+</script>
+<body>
+	<h2>Interactive Periodic Table of Elements</h2>
+
+	<table>
+		<!-- Row 1 -->
+		<tr>
+			<td
+				title="Hydrogen (H) - Usage: Fuel cells, rocket fuel, chemical industry">
+				<span class="element-number">1</span><span class="element-symbol">H</span>
+			</td>
+			<td colspan="16"></td>
+			<td
+				title="Helium (He) - Usage: Balloons, cryogenics, gas chromatography">
+				<span class="element-number">2</span><span class="element-symbol">He</span>
+			</td>
+		</tr>
+
+		<!-- Row 2 -->
+		<tr>
+			<td title="Lithium (Li) - Usage: Batteries, mood-stabilizing drugs">
+				<span class="element-number">3</span><span class="element-symbol">Li</span>
+			</td>
+			<td title="Beryllium (Be) - Usage: Aerospace, X-ray windows"><span
+				class="element-number">4</span><span class="element-symbol">Be</span>
+			</td>
+			<td colspan="10"></td>
+			<td title="Boron (B) - Usage: Glass, detergents, semiconductors">
+				<span class="element-number">5</span><span class="element-symbol">B</span>
+			</td>
+			<td title="Carbon (C) - Usage: Steel, fuels, graphite, diamonds">
+				<span class="element-number">6</span><span class="element-symbol">C</span>
+			</td>
+			<td
+				title="Nitrogen (N) - Usage: Fertilizers, explosives, industrial gas">
+				<span class="element-number">7</span><span class="element-symbol">N</span>
+			</td>
+			<td
+				title="Oxygen (O) - Usage: Breathing, steelmaking, water treatment">
+				<span class="element-number">8</span><span class="element-symbol">O</span>
+			</td>
+			<td title="Fluorine (F) - Usage: Toothpaste, Teflon, refrigerants">
+				<span class="element-number">9</span><span class="element-symbol">F</span>
+			</td>
+			<td title="Neon (Ne) - Usage: Neon signs, cryogenics"><span
+				class="element-number">10</span><span class="element-symbol">Ne</span>
+			</td>
+		</tr>
+
+		<!-- Row 3 -->
+		<tr>
+			<td title="Sodium (Na) - Usage: Street lights, chemical industry">
+				<span class="element-number">11</span><span class="element-symbol">Na</span>
+			</td>
+			<td title="Magnesium (Mg) - Usage: Alloys, fireworks, medicine">
+				<span class="element-number">12</span><span class="element-symbol">Mg</span>
+			</td>
+			<td colspan="10"></td>
+			<td title="Aluminum (Al) - Usage: Foil, aircraft, construction">
+				<span class="element-number">13</span><span class="element-symbol">Al</span>
+			</td>
+			<td title="Silicon (Si) - Usage: Electronics, glass, solar cells">
+				<span class="element-number">14</span><span class="element-symbol">Si</span>
+			</td>
+			<td title="Phosphorus (P) - Usage: Fertilizers, detergents"><span
+				class="element-number">15</span><span class="element-symbol">P</span>
+			</td>
+			<td
+				title="Sulfur (S) - Usage: Sulfuric acid, fertilizers, vulcanization">
+				<span class="element-number">16</span><span class="element-symbol">S</span>
+			</td>
+			<td title="Chlorine (Cl) - Usage: Disinfectants, PVC production">
+				<span class="element-number">17</span><span class="element-symbol">Cl</span>
+			</td>
+			<td title="Argon (Ar) - Usage: Lighting, welding, inert gas"><span
+				class="element-number">18</span><span class="element-symbol">Ar</span>
+			</td>
+		</tr>
+
+		<!-- Row 4 -->
+		<tr>
+			<td title="Potassium (K) - Usage: Fertilizers, soap making"><span
+				class="element-number">19</span><span class="element-symbol">K</span>
+			</td>
+			<td title="Calcium (Ca) - Usage: Cement, bones, metallurgy"><span
+				class="element-number">20</span><span class="element-symbol">Ca</span>
+			</td>
+			<td title="Scandium (Sc) - Usage: Alloys, aerospace"><span
+				class="element-number">21</span><span class="element-symbol">Sc</span>
+			</td>
+			<td title="Titanium (Ti) - Usage: Aircraft, implants, pigments">
+				<span class="element-number">22</span><span class="element-symbol">Ti</span>
+			</td>
+			<td title="Vanadium (V) - Usage: Steel alloys, catalysts"><span
+				class="element-number">23</span><span class="element-symbol">V</span>
+			</td>
+			<td title="Chromium (Cr) - Usage: Stainless steel, plating"><span
+				class="element-number">24</span><span class="element-symbol">Cr</span>
+			</td>
+			<td title="Manganese (Mn) - Usage: Steel production, batteries">
+				<span class="element-number">25</span><span class="element-symbol">Mn</span>
+			</td>
+			<td title="Iron (Fe) - Usage: Steel, construction, magnets"><span
+				class="element-number">26</span><span class="element-symbol">Fe</span>
+			</td>
+			<td title="Cobalt (Co) - Usage: Batteries, pigments, alloys"><span
+				class="element-number">27</span><span class="element-symbol">Co</span>
+			</td>
+			<td title="Nickel (Ni) - Usage: Stainless steel, coins, batteries">
+				<span class="element-number">28</span><span class="element-symbol">Ni</span>
+			</td>
+			<td title="Copper (Cu) - Usage: Electrical wiring, plumbing"><span
+				class="element-number">29</span><span class="element-symbol">Cu</span>
+			</td>
+			<td title="Zinc (Zn) - Usage: Galvanization, alloys, batteries">
+				<span class="element-number">30</span><span class="element-symbol">Zn</span>
+			</td>
+			<td title="Gallium (Ga) - Usage: Semiconductors, LEDs"><span
+				class="element-number">31</span><span class="element-symbol">Ga</span>
+			</td>
+			<td title="Germanium (Ge) - Usage: Semiconductors, fiber optics">
+				<span class="element-number">32</span><span class="element-symbol">Ge</span>
+			</td>
+			<td title="Arsenic (As) - Usage: Semiconductors, pesticides"><span
+				class="element-number">33</span><span class="element-symbol">As</span>
+			</td>
+			<td title="Selenium (Se) - Usage: Electronics, glass, pigments">
+				<span class="element-number">34</span><span class="element-symbol">Se</span>
+			</td>
+			<td title="Bromine (Br) - Usage: Flame retardants, photography">
+				<span class="element-number">35</span><span class="element-symbol">Br</span>
+			</td>
+			<td title="Krypton (Kr) - Usage: Lighting, photography"><span
+				class="element-number">36</span><span class="element-symbol">Kr</span>
+			</td>
+		</tr>
+
+		<!-- Row 5 -->
+		<tr>
+			<td title="Rubidium (Rb) - Usage: Research, atomic clocks"><span
+				class="element-number">37</span><span class="element-symbol">Rb</span>
+			</td>
+			<td title="Strontium (Sr) - Usage: Fireworks, magnets"><span
+				class="element-number">38</span><span class="element-symbol">Sr</span>
+			</td>
+			<td title="Yttrium (Y) - Usage: LEDs, superconductors"><span
+				class="element-number">39</span><span class="element-symbol">Y</span>
+			</td>
+			<td title="Zirconium (Zr) - Usage: Ceramics, nuclear reactors">
+				<span class="element-number">40</span><span class="element-symbol">Zr</span>
+			</td>
+			<td title="Niobium (Nb) - Usage: Steel alloys, superconductors">
+				<span class="element-number">41</span><span class="element-symbol">Nb</span>
+			</td>
+			<td title="Molybdenum (Mo) - Usage: Steel alloys, catalysts"><span
+				class="element-number">42</span><span class="element-symbol">Mo</span>
+			</td>
+			<td title="Technetium (Tc) - Usage: Medical imaging"><span
+				class="element-number">43</span><span class="element-symbol">Tc</span>
+			</td>
+			<td title="Ruthenium (Ru) - Usage: Electronics, catalysts"><span
+				class="element-number">44</span><span class="element-symbol">Ru</span>
+			</td>
+			<td title="Rhodium (Rh) - Usage: Catalytic converters, jewelry">
+				<span class="element-number">45</span><span class="element-symbol">Rh</span>
+			</td>
+			<td title="Palladium (Pd) - Usage: Catalysts, electronics"><span
+				class="element-number">46</span><span class="element-symbol">Pd</span>
+			</td>
+			<td title="Silver (Ag) - Usage: Jewelry, electronics, photography">
+				<span class="element-number">47</span><span class="element-symbol">Ag</span>
+			</td>
+			<td title="Cadmium (Cd) - Usage: Batteries, coatings"><span
+				class="element-number">48</span><span class="element-symbol">Cd</span>
+			</td>
+			<td title="Indium (In) - Usage: LCD screens, semiconductors"><span
+				class="element-number">49</span><span class="element-symbol">In</span>
+			</td>
+			<td title="Tin (Sn) - Usage: Solder, alloys, coatings"><span
+				class="element-number">50</span><span class="element-symbol">Sn</span>
+			</td>
+			<td title="Antimony (Sb) - Usage: Flame retardants, alloys"><span
+				class="element-number">51</span><span class="element-symbol">Sb</span>
+			</td>
+			<td title="Tellurium (Te) - Usage: Alloys, solar cells"><span
+				class="element-number">52</span><span class="element-symbol">Te</span>
+			</td>
+			<td title="Iodine (I) - Usage: Disinfectants, nutrition"><span
+				class="element-number">53</span><span class="element-symbol">I</span>
+			</td>
+			<td title="Xenon (Xe) - Usage: Lighting, anesthesia"><span
+				class="element-number">54</span><span class="element-symbol">Xe</span>
+			</td>
+		</tr>
+
+		<!-- Row 6: Cs, Ba, Lanthanides -->
+		<tr>
+			<td title="Cesium (Cs) - Usage: Atomic clocks, photoelectric cells">
+				<span class="element-number">55</span><span class="element-symbol">Cs</span>
+			</td>
+			<td title="Barium (Ba) - Usage: X-ray contrast, fireworks"><span
+				class="element-number">56</span><span class="element-symbol">Ba</span>
+			</td>
+			<td colspan="10" style="text-align: center;">Lanthanides (57-71
+				below)</td>
+			<td title="Hafnium (Hf) - Usage: Nuclear control rods, alloys">
+				<span class="element-number">72</span><span class="element-symbol">Hf</span>
+			</td>
+			<td title="Tantalum (Ta) - Usage: Electronics, surgical implants">
+				<span class="element-number">73</span><span class="element-symbol">Ta</span>
+			</td>
+			<td title="Tungsten (W) - Usage: Filaments, alloys, tools"><span
+				class="element-number">74</span><span class="element-symbol">W</span>
+			</td>
+			<td title="Rhenium (Re) - Usage: Superalloys, catalysts"><span
+				class="element-number">75</span><span class="element-symbol">Re</span>
+			</td>
+			<td title="Osmium (Os) - Usage: Alloys, fountain pen tips"><span
+				class="element-number">76</span><span class="element-symbol">Os</span>
+			</td>
+			<td title="Iridium (Ir) - Usage: Spark plugs, crucibles"><span
+				class="element-number">77</span><span class="element-symbol">Ir</span>
+			</td>
+			<td title="Platinum (Pt) - Usage: Catalysts, jewelry"><span
+				class="element-number">78</span><span class="element-symbol">Pt</span>
+			</td>
+			<td title="Gold (Au) - Usage: Jewelry, electronics, coins"><span
+				class="element-number">79</span><span class="element-symbol">Au</span>
+			</td>
+			<td title="Mercury (Hg) - Usage: Thermometers, batteries, lamps">
+				<span class="element-number">80</span><span class="element-symbol">Hg</span>
+			</td>
+			<td title="Thallium (Tl) - Usage: Electronics, glass"><span
+				class="element-number">81</span><span class="element-symbol">Tl</span>
+			</td>
+			<td title="Lead (Pb) - Usage: Batteries, radiation shielding"><span
+				class="element-number">82</span><span class="element-symbol">Pb</span>
+			</td>
+			<td title="Bismuth (Bi) - Usage: Cosmetics, medicines, alloys">
+				<span class="element-number">83</span><span class="element-symbol">Bi</span>
+			</td>
+			<td title="Polonium (Po) - Usage: Research, anti-static devices">
+				<span class="element-number">84</span><span class="element-symbol">Po</span>
+			</td>
+			<td title="Astatine (At) - Usage: Research, radioisotope therapy">
+				<span class="element-number">85</span><span class="element-symbol">At</span>
+			</td>
+			<td title="Radon (Rn) - Usage: Radiotherapy, research"><span
+				class="element-number">86</span><span class="element-symbol">Rn</span>
+			</td>
+		</tr>
+
+		<!-- Row 7: Fr, Ra, Actinides -->
+		<tr>
+			<td title="Francium (Fr) - Usage: Research"><span
+				class="element-number">87</span><span class="element-symbol">Fr</span>
+			</td>
+			<td title="Radium (Ra) - Usage: Radiotherapy, luminescent paint">
+				<span class="element-number">88</span><span class="element-symbol">Ra</span>
+			</td>
+			<td colspan="10" style="text-align: center;">Actinides (89-103
+				below)</td>
+			<td title="Rutherfordium (Rf) - Usage: Research"><span
+				class="element-number">104</span><span class="element-symbol">Rf</span>
+			</td>
+			<td title="Dubnium (Db) - Usage: Research"><span
+				class="element-number">105</span><span class="element-symbol">Db</span>
+			</td>
+			<td title="Seaborgium (Sg) - Usage: Research"><span
+				class="element-number">106</span><span class="element-symbol">Sg</span>
+			</td>
+			<td title="Bohrium (Bh) - Usage: Research">

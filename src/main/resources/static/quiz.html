@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz</title>
+<style>
+body { font-family: Arial,sans-serif; background:#f5f5f5; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+.quiz-container { background:white; padding:30px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); width:400px; text-align:center; }
+h2 { margin-bottom:10px; color:#333; }
+.option { display:block; margin:5px 0; cursor:pointer; padding:5px; border:1px solid #ccc; border-radius:6px; text-align:left; }
+.option:hover { background:#e0e0e0; }
+#submit-btn { margin-top:15px; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; background:#28a745; color:white; }
+#submit-btn:hover { background:#1e7e34; }
+#score { margin-top:15px; font-weight:bold; }
+.logout-btn { margin-top:20px; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; background:#dc3545; color:white; }
+.logout-btn:hover { background:#b52a36; }
+#top-scorer { margin-top:10px; font-weight:bold; color:#007bff; }
+.correct { background-color: #c8f7c5 !important; border-color: #28a745 !important; } /* green */
+.wrong { background-color: #f7c5c5 !important; border-color: #dc3545 !important; }  /* red */
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h2>Quiz Time!</h2>
+  <p id="username-display"></p>
+  <div id="quiz"></div>
+  <button id="submit-btn" onclick="submitQuiz()">Submit</button>
+  <div id="score"></div>
+  <div id="top-scorer"></div>
+  <button class="back-btn" onclick="goBackToDashboard()">⬅ Back to Dashboard</button>
+
+  <script>
+  function goBackToDashboard() {
+    window.location.href = "dashboard.html";
+  }
+  </script>
+</div>
+
+<script>
+const username = localStorage.getItem("savedUsername");
+const standard = localStorage.getItem("savedStandard");
+
+if(!username) {
+  alert("Please log in first!");
+  window.location.href="main.html";
+}
+
+document.getElementById("username-display").textContent = `User: ${username} | Standard: ${standard}`;
+
+const quizContainer = document.getElementById("quiz");
+let correctAnswers = [];
+
+// Load random questions
+async function loadQuiz() {
+	const res = await fetch(`http://localhost:8080/api/quiz/random?count=10`);
+  const questions = await res.json();
+
+  questions.forEach((q,index)=>{
+    const div = document.createElement("div");
+    div.classList.add("question-block");
+
+    const options = [q.option1,q.option2,q.option3].sort(()=>0.5-Math.random());
+
+    let html = `<p class="question">${index+1}. ${q.question}</p>`;
+    options.forEach(opt=>{
+      html += `<label class="option">
+                 <input type="radio" name="q${index}" value="${opt}"> ${opt}
+               </label>`;
+    });
+
+    div.innerHTML = html;
+    quizContainer.appendChild(div);
+    correctAnswers.push(q.answer);
+  });
+}
+loadQuiz();
+
+// Submit quiz
+async function submitQuiz() {
+  let score = 0;
+
+  correctAnswers.forEach((ans, index) => {
+    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+    const options = document.querySelectorAll(`input[name="q${index}"]`);
+
+    options.forEach(opt => {
+      const label = opt.parentElement;
+      label.classList.remove("correct", "wrong");
+      if (opt.value === ans) {
+        label.classList.add("correct"); // mark correct answer
+      }
+    });
+
+    if (selected) {
+      if (selected.value === ans) {
+        score++;
+      } else {
+        selected.parentElement.classList.add("wrong"); // mark wrong answer
+      }
+    }
+  });
+
+  document.getElementById("score").textContent = `Your Score: ${score} / ${correctAnswers.length}`;
+
+  // Save to DB
+  await fetch("http://localhost:8080/api/quiz/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, standard, score })
+  });
+
+  // Show top scorers
+  const topRes = await fetch("http://localhost:8080/api/quiz/top");
+  const topList = await topRes.json();
+
+  const topContainer = document.getElementById("top-scorer");
+  if (Array.isArray(topList) && topList.length > 0) {
+    let html = "🏆 <b>Top Scorers:</b><br>";
+    topList.forEach((user, i) => {
+      html += `${i + 1}. ${user.username} — ${user.score}<br>`;
+    });
+    topContainer.innerHTML = html;
+  } else {
+    topContainer.textContent = "No top scorers yet.";
+  }
+}
+
+// Logout function
+function logout() {
+  localStorage.removeItem("savedUsername");
+  localStorage.removeItem("savedStandard");
+  localStorage.removeItem("lastScore");
+  alert("You have been logged out.");
+  window.location.href = "main.html";
+}
+</script>
+
+</body>
+</html>

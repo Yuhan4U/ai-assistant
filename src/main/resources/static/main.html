@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login & Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 95%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .login-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .login-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .register-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .register-btn:hover {
+      background-color: #1e7e34;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    a {
+      color: #007bff;
+      cursor: pointer;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <h2>Login</h2>
+      <input type="text" id="loginUsername" placeholder="Username" required><br>
+      <input type="password" id="loginPassword" placeholder="Password" required><br>
+      <button class="btn login-btn" onclick="login()">Login</button>
+      <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
+      <p id="message"></p>
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <div id="registerForm" class="hidden">
+      <h2>Register</h2>
+      <input type="text" id="username" placeholder="Username" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
+      <input type="text" id="standard" placeholder="Standard" required><br>
+      <button class="btn register-btn" onclick="register()">Register</button>
+      <p>Already have an account? <a onclick="showLogin()">Go to Login</a></p>
+      <p id="registerMessage"></p>
+    </div>
+  </div>
+
+  <script>
+    // Toggle between forms
+    function showRegister() {
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("registerForm").classList.remove("hidden");
+    }
+
+    function showLogin() {
+      document.getElementById("registerForm").classList.add("hidden");
+      document.getElementById("loginForm").classList.remove("hidden");
+    }
+
+    // Register new user
+    async function register() {
+      const userName = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const standard = document.getElementById("standard").value;
+      const msg = document.getElementById("registerMessage");
+
+      if (!userName || !password || !standard) {
+        msg.style.color = "red";
+        msg.textContent = "⚠️ Please fill in all fields.";
+        return;
+      }
+
+      const res = await fetch("http://localhost:8080/api/user/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName, password, standard })
+      });
+
+      if (res.ok) {
+        msg.style.color = "green";
+        msg.textContent = await res.text();
+        setTimeout(() => showLogin(), 1000);
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "❌ Registration failed!";
+      }
+    }
+
+    // Login user
+    async function login() {
+      const userName = document.getElementById("loginUsername").value;
+      const password = document.getElementById("loginPassword").value;
+      const msg = document.getElementById("message");
+
+      if (!userName || !password) {
+        msg.style.color = "red";
+        msg.textContent = "⚠️ Please enter both username and password.";
+        return;
+      }
+
+      const res = await fetch("http://localhost:8080/api/user/login", {
+    	    method: "POST",
+    	    headers: { "Content-Type": "application/json" },
+    	    body: JSON.stringify({ userName, password })
+    	  });
+
+    	  if (res.ok) {
+    	    const data = await res.json(); // data: { userName, standard }
+
+    	    localStorage.setItem("savedUsername", data.userName);
+    	    localStorage.setItem("savedStandard", data.standard);
+
+    	    msg.style.color = "green";
+    	    msg.textContent = "✅ Login successful!";
+    	    setTimeout(() => window.location.href = "Dashboard.html", 1000);
+    	  } else {
+    	    msg.style.color = "red";
+    	    msg.textContent = "❌ Invalid username or password!";
+    	  }
+    }
+  </script>
+
+</body>
+</html>

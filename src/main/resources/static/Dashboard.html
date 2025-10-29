@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard with Yuhu Robot</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at center, #1b2735, #090a0f);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+/* ==== Dashboard Section ==== */
+.dashboard {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 340px;
+  text-align: center;
+  margin-left: 80px;
+}
+
+.dashboard h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.dashboard p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: block;
+  width: 90%;
+  padding: 12px;
+  margin: 10px auto;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  transition: 0.3s;
+}
+
+.chemistry { background-color: #17a2b8; }
+.chemistry:hover { background-color: #138496; }
+
+.translator { background-color: #ffc107; color: black; }
+.translator:hover { background-color: #e0a800; }
+
+.maths { background-color: #6f42c1; }
+.maths:hover { background-color: #5936a2; }
+
+.quiz { background-color: #28a745; }
+.quiz:hover { background-color: #1e7e34; }
+
+.logout {
+  background-color: #dc3545;
+  color: white;
+}
+.logout:hover {
+  background-color: #b52a36;
+}
+
+/* ==== Robot Section ==== */
+.robot-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 80px;
+}
+
+.robot {
+  width: 260px;
+  height: 320px;
+  background: url('robot-face.png') no-repeat center/contain;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+input, button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+input {
+  width: 300px;
+  outline: none;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button {
+  background: cyan;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: limegreen;
+}
+</style>
+</head>
+<body>
+
+  <!-- Dashboard (Left Side) -->
+  <div class="dashboard">
+    <h2>Welcome, <span id="username-display"></span>!</h2>
+    <p>Standard: <span id="standard-display"></span></p>
+
+    <button class="btn chemistry" onclick="goToChemistry()">🧪 Chemistry</button>
+    <button class="btn translator" onclick="goToTranslator()">🌍 Global Translator</button>
+    <button class="btn maths" onclick="goToMaths()">➕ Maths</button>
+    <button class="btn quiz" onclick="goToQuiz()">📝 Quiz</button>
+    <button class="btn logout" onclick="logout()">🚪 Logout</button>
+  </div>
+
+  <!-- Robot (Right Side) -->
+  <div class="robot-container">
+    <div class="robot"></div>
+
+    <input type="text" id="text" placeholder="Ask Yuhu something..." />
+    <div class="buttons">
+      <button onclick="talk()">🔊 Ask</button>
+      <button onclick="introduce()">🤖 Who are you?</button>
+    </div>
+  </div>
+
+<script>
+async function talk() {
+  const textInput = document.getElementById("text").value || "";
+  try {
+    const response = await fetch("http://localhost:8080/api/robot/talk", {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: textInput
+    });
+
+    if (!response.ok) throw new Error("Failed to contact Yuhu API");
+
+    const reply = await response.text();
+    speakText(reply);
+  } catch (err) {
+    console.error("Error:", err);
+    alert("🤖 Yuhu is taking a nap!");
+  }
+}
+
+function introduce() {
+  const intro = "Hello there! I’m Yuhu, your smart robot assistant created by Yuhan. I can talk, learn, and help you with studies. Let’s make learning fun together!";
+  speakText(intro);
+}
+
+function speakText(text) {
+  speechSynthesis.cancel(); // stop any current voice
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.pitch = 1.1;
+  utterance.rate = 0.95;
+  speechSynthesis.speak(utterance);
+}
+
+// Dashboard data
+const username = localStorage.getItem("savedUsername");
+const standard = localStorage.getItem("savedStandard");
+
+if (!username) {
+  alert("Please log in first!");
+  window.location.href = "main.html";
+} else {
+  document.getElementById("username-display").textContent = username;
+  document.getElementById("standard-display").textContent = standard || "N/A";
+}
+
+// Navigation
+function goToChemistry() { window.location.href = "chemistry.html"; }
+function goToTranslator() { window.location.href = "index.html"; }
+function goToMaths() { window.location.href = "maths.html"; }
+function goToQuiz() { window.location.href = "quiz.html"; }
+function logout() {
+  localStorage.removeItem("savedUsername");
+  localStorage.removeItem("savedStandard");
+  alert("You have been logged out.");
+  window.location.href = "main.html";
+}
+</script>
+
+</body>
+</html>
