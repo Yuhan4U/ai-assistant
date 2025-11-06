@@ -2,49 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Text Translator</title>
+  <title>🌍 Text Translator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
     }
+
+    .container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 420px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #0d47a1;
+      margin-bottom: 20px;
+    }
+
     input, select, button {
-      padding: 8px;
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
       font-size: 16px;
-      margin-top: 8px;
-      display: block;
-      width: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: all 0.3s;
     }
+
+    input:focus, select:focus {
+      border-color: #0d47a1;
+      box-shadow: 0 0 5px rgba(13, 71, 161, 0.4);
+    }
+
     button {
-      cursor: pointer;
-    }
-    #response {
-      margin-top: 20px;
-      font-weight: bold;
-      color: darkblue;
-      white-space: pre-wrap;
-    }
-    .back-btn {
-      background-color: #007bff;
+      background-color: #1976d2;
       color: white;
       border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
-      margin-top: 20px;
+      transition: background 0.3s;
     }
+
+    button:hover {
+      background-color: #0d47a1;
+    }
+
+    .back-btn {
+      background-color: #f44336;
+    }
+
     .back-btn:hover {
-      background-color: #0056b3;
+      background-color: #b71c1c;
+    }
+
+    #response {
+      margin-top: 20px;
+      color: #0d47a1;
+      font-weight: bold;
+      background: #e3f2fd;
+      padding: 10px;
+      border-radius: 8px;
+      min-height: 50px;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <h2>🌍 Text Translator</h2>
+  <div class="container">
+    <h2>🌍 Smart Text Translator</h2>
 
-  <input type="text" id="messageInput" placeholder="Enter text to translate">
-  <select id="languageInput">
-    <!-- (keep your long list of language options here) -->
- <option value="Afar">Afar</option>
+    <input type="text" id="messageInput" placeholder="Enter text to translate">
+    
+    <select id="languageInput">
+      <option value="" disabled selected>Select target language</option>
+     <option value="Afar">Afar</option>
 <option value="Abkhazian">Abkhazian</option>
 <option value="Avestan">Avestan</option>
 <option value="Afrikaans">Afrikaans</option>
@@ -218,41 +259,41 @@
 <option value="Zhuang">Zhuang</option>
 <option value="Zulu">Zulu</option>
 
-    <!-- ... the rest of your list ... -->
-  </select>
+      <!-- Add more if you want -->
+    </select>
 
-  <button onclick="sendMessage()">Translate</button>
-  <button class="back-btn" onclick="goBack()">⬅ Back to Dashboard</button>
+    <button onclick="translateText()">Translate</button>
+    <button class="back-btn" onclick="goBack()">⬅ Back to Dashboard</button>
 
-  <div id="response"></div>
+    <div id="response"></div>
+  </div>
 
   <script>
-    async function sendMessage() {
-      const message = document.getElementById("messageInput").value;
-      const language = document.getElementById("languageInput").value;
+    async function translateText() {
+      const sourceText = document.getElementById("messageInput").value.trim();
+      const targetLanguage = document.getElementById("languageInput").value;
 
-      if (!message) {
-        alert("Please enter text to translate.");
+      if (!sourceText || !targetLanguage) {
+        alert("⚠️ Please enter text and select a target language.");
         return;
       }
 
-      try {
-        document.getElementById("response").innerText = "Translating...";
+      document.getElementById("response").innerText = "⏳ Translating...";
 
-        const res = await fetch(`/api/translate/${language}`, {
+      try {
+        const res = await fetch("http://localhost:8080/api/robot/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
+          body: JSON.stringify({ sourceText, targetLanguage })
         });
 
         if (!res.ok) throw new Error("API call failed: " + res.status);
 
-        const data = await res.json();
-        document.getElementById("response").innerText =
-          "Translated (" + language + "):\n" + data.reply;
+        const data = await res.text(); // Backend returns plain String
+        document.getElementById("response").innerText = "✅ " + data;
 
-      } catch (error) {
-        document.getElementById("response").innerText = "Error: " + error.message;
+      } catch (err) {
+        document.getElementById("response").innerText = "❌ Error: " + err.message;
       }
     }
 
@@ -260,6 +301,5 @@
       window.location.href = "dashboard.html";
     }
   </script>
-
 </body>
 </html>

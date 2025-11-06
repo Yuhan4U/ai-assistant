@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yuhan.test.web.demoweb.pojo.TranslationRequest;
 import com.yuhan.test.web.demoweb.service.ChatGPTService;
 
 @RestController
@@ -23,10 +24,12 @@ public class ROBOController {
 		String response=chatGPTService.ask(text);
 		return response;
 	}
+	
+	@PostMapping("/translate")
+	public String translate(@RequestBody TranslationRequest request) throws IOException {
+		String response=chatGPTService.translate(request);
+		return response;
+	}
 
-	// Option 2: If you want to send text as form data instead
-	// @PostMapping("/talk")
-	// public String talk(@RequestParam String text) {
-	// return chatGPTService.speak(text);
-	// }
+	
 }
