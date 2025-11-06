@@ -2,23 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login & Registration</title>
+  <title>Yuhu Bot 1.0 - Login & Registration</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
+      height: 100vh;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
     }
 
-    .container {
+    .main-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 800px;
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 320px;
+      gap: 30px;
+    }
+
+    /* Left: Form Section */
+    .container {
+      flex: 1;
       text-align: center;
     }
 
@@ -65,7 +75,7 @@
       background-color: #1e7e34;
     }
 
-    #message {
+    #message, #registerMessage {
       margin-top: 15px;
       font-size: 14px;
     }
@@ -79,35 +89,80 @@
       cursor: pointer;
       font-size: 13px;
     }
+
+    /* Right: Image Banner */
+    .banner {
+      flex: 1;
+      text-align: center;
+    }
+
+    .banner img {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .banner h1 {
+      font-size: 28px;
+      color: #007bff;
+      margin-top: 15px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Make it responsive */
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        width: 90%;
+      }
+
+      .banner {
+        order: -1;
+      }
+
+      .banner img {
+        max-width: 250px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- LOGIN FORM -->
-    <div id="loginForm">
-      <h2>Login</h2>
-      <input type="text" id="loginUsername" placeholder="Username" required><br>
-      <input type="password" id="loginPassword" placeholder="Password" required><br>
-      <button class="btn login-btn" onclick="login()">Login</button>
-      <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
-      <p id="message"></p>
+  <div class="main-container">
+    
+    <!-- LEFT SIDE: Login / Register -->
+    <div class="container">
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username" required><br>
+        <input type="password" id="loginPassword" placeholder="Password" required><br>
+        <button class="btn login-btn" onclick="login()">Login</button>
+        <p>Don't have an account? <a onclick="showRegister()">Register here</a></p>
+        <p id="message"></p>
+      </div>
+
+      <!-- REGISTRATION FORM -->
+      <div id="registerForm" class="hidden">
+        <h2>Register</h2>
+        <input type="text" id="username" placeholder="Username" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <input type="text" id="standard" placeholder="Standard" required><br>
+        <button class="btn register-btn" onclick="register()">Register</button>
+        <p>Already have an account? <a onclick="showLogin()">Go to Login</a></p>
+        <p id="registerMessage"></p>
+      </div>
     </div>
 
-    <!-- REGISTRATION FORM -->
-    <div id="registerForm" class="hidden">
-      <h2>Register</h2>
-      <input type="text" id="username" placeholder="Username" required><br>
-      <input type="password" id="password" placeholder="Password" required><br>
-      <input type="text" id="standard" placeholder="Standard" required><br>
-      <button class="btn register-btn" onclick="register()">Register</button>
-      <p>Already have an account? <a onclick="showLogin()">Go to Login</a></p>
-      <p id="registerMessage"></p>
+    <!-- RIGHT SIDE: Banner -->
+    <div class="banner">
+      <img src="Yuhu_Bot_1.0.png" alt="Yuhu Bot 1.0 Banner">
     </div>
+
   </div>
 
   <script>
-    // Toggle between forms
     function showRegister() {
       document.getElementById("loginForm").classList.add("hidden");
       document.getElementById("registerForm").classList.remove("hidden");
@@ -118,7 +173,6 @@
       document.getElementById("loginForm").classList.remove("hidden");
     }
 
-    // Register new user
     async function register() {
       const userName = document.getElementById("username").value;
       const password = document.getElementById("password").value;
@@ -147,7 +201,6 @@
       }
     }
 
-    // Login user
     async function login() {
       const userName = document.getElementById("loginUsername").value;
       const password = document.getElementById("loginPassword").value;
@@ -160,24 +213,23 @@
       }
 
       const res = await fetch("http://localhost:8080/api/user/login", {
-    	    method: "POST",
-    	    headers: { "Content-Type": "application/json" },
-    	    body: JSON.stringify({ userName, password })
-    	  });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName, password })
+      });
 
-    	  if (res.ok) {
-    	    const data = await res.json(); // data: { userName, standard }
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("savedUsername", data.userName);
+        localStorage.setItem("savedStandard", data.standard);
 
-    	    localStorage.setItem("savedUsername", data.userName);
-    	    localStorage.setItem("savedStandard", data.standard);
-
-    	    msg.style.color = "green";
-    	    msg.textContent = "✅ Login successful!";
-    	    setTimeout(() => window.location.href = "Dashboard.html", 1000);
-    	  } else {
-    	    msg.style.color = "red";
-    	    msg.textContent = "❌ Invalid username or password!";
-    	  }
+        msg.style.color = "green";
+        msg.textContent = "✅ Login successful!";
+        setTimeout(() => window.location.href = "Dashboard.html", 1000);
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "❌ Invalid username or password!";
+      }
     }
   </script>
 

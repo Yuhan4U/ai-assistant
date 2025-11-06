@@ -50,6 +50,7 @@ public class ChatGPTService {
 				.addHeader("Authorization", "Bearer " + apiKey).build();
 
 		try (Response response = client.newCall(request).execute()) {
+			System.out.println(response);
 			if (!response.isSuccessful())
 				throw new RuntimeException("Unexpected code " + response);
 
