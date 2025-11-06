@@ -26,17 +26,16 @@ public class ChatGPTService {
 	private String url;
 
 	// 🧠 Ask Yuhu a question
-	public String ask(String string) throws IOException {
+	public String ask(String message,String systemPrompt) throws IOException {
 		OkHttpClient client = new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS)
 				.readTimeout(60, TimeUnit.SECONDS).build();
 
 		// System message (Yuhu’s personality)
 		JSONObject systemMessage = new JSONObject().put("role", "system").put("content",
-				"You are a friendly talking robot assistant named Yuhu 1.0. "
-						+ "You always reply politely, briefly, and with a cheerful tone.");
+				systemPrompt);
 
 		// User message
-		JSONObject userMessage = new JSONObject().put("role", "user").put("content", string);
+		JSONObject userMessage = new JSONObject().put("role", "user").put("content", message);
 
 		// Combine both
 		JSONArray messages = new JSONArray().put(systemMessage).put(userMessage);

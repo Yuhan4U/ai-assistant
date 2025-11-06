@@ -90,8 +90,8 @@ body {
   50% { transform: translateY(-10px); }
 }
 
-input, button, select {
-  margin-top: 10px;
+input, button {
+  margin-top: 20px;
   padding: 10px 15px;
   border: none;
   border-radius: 10px;
@@ -103,16 +103,10 @@ input {
   outline: none;
 }
 
-select {
-  width: 320px;
-  background: white;
-  color: black;
-}
-
 .buttons {
   display: flex;
   gap: 10px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 button {
@@ -146,80 +140,31 @@ button:hover {
 <div class="robot-container">
   <div class="robot"></div>
 
-  <!-- Mode Selector -->
-  <select id="mode" onchange="toggleMode()">
-    <option value="general" selected>🤖 General</option>
-    <option value="guidance">🎓 Career Guidance</option>
-  </select>
-
-  <!-- General Chat Input -->
-  <div id="general-section">
-    <input type="text" id="text" placeholder="Ask Yuhu something..." />
-  </div>
-
-  <!-- Career Guidance Inputs (Initially Hidden) -->
-  <div id="guidance-section" style="display:none; flex-direction:column; gap:10px;">
-    <input type="text" id="name" placeholder="Enter your name" />
-    <input type="text" id="standard" placeholder="Enter your current standard" />
-    <input type="text" id="goal" placeholder="Enter your career goal (e.g., doctor)" />
-  </div>
-
+  <input type="text" id="text" placeholder="Ask Yuhu something..." />
   <div class="buttons">
-    <button onclick="askYuhu()">🔊 Ask</button>
+    <button onclick="talk()">🔊 Ask</button>
     <button onclick="introduce()">🤖 Who are you?</button>
   </div>
 </div>
 
 <script>
-function toggleMode() {
-  const mode = document.getElementById("mode").value;
-  document.getElementById("general-section").style.display =
-    mode === "general" ? "block" : "none";
-  document.getElementById("guidance-section").style.display =
-    mode === "guidance" ? "flex" : "none";
-}
-
-async function askYuhu() {
-  const mode = document.getElementById("mode").value;
+async function talk() {
+  const textInput = document.getElementById("text").value.trim();
+  if (!textInput) {
+    alert("Please enter something for Yuhu to answer!");
+    return;
+  }
 
   try {
-    let response, replyText;
-
-    if (mode === "general") {
-      const textInput = document.getElementById("text").value.trim();
-      if (!textInput) return alert("Please enter something for Yuhu to answer!");
-
-      response = await fetch("http://localhost:8080/api/robot/talk", {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: textInput,
-      });
-    } else {
-      // Career Guidance mode
-      const name = document.getElementById("name").value.trim();
-      const std = document.getElementById("standard").value.trim();
-      const goal = document.getElementById("goal").value.trim();
-
-      if (!name || !std || !goal)
-        return alert("Please fill in all fields for guidance.");
-
-      // Send JSON body
-      const requestBody = JSON.stringify({
-        name: name,
-        std: std,
-        goal: goal,
-      });
-
-      response = await fetch("http://localhost:8080/api/robot/guidence", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: requestBody,
-      });
-    }
+    const response = await fetch("http://localhost:8080/api/robot/talk", {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: textInput
+    });
 
     if (!response.ok) throw new Error("Failed to contact Yuhu API");
-    replyText = await response.text();
-    speakText(replyText);
+    const reply = await response.text();
+    speakText(reply);
   } catch (err) {
     console.error("Error:", err);
     alert("🤖 Yuhu is taking a nap!");
@@ -227,20 +172,19 @@ async function askYuhu() {
 }
 
 function introduce() {
-  const intro =
-    "Hello there! I’m Yuhu 1.0, your friendly robot assistant. I can chat with you or guide you in your career path. Let's learn and grow together!";
+  const intro = "Hello there! I’m You who BOT, your smart robot assistant created by Yuhan. I can talk, learn, and help you with studies. Let’s make learning fun together!";
   speakText(intro);
 }
 
 function speakText(text) {
-  speechSynthesis.cancel();
+  speechSynthesis.cancel(); 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.pitch = 1.1;
   utterance.rate = 0.95;
   speechSynthesis.speak(utterance);
 }
 
-// Dashboard setup
+// Dashboard data
 const username = localStorage.getItem("savedUsername");
 const standard = localStorage.getItem("savedStandard");
 

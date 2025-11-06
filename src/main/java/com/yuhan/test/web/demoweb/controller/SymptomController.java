@@ -29,9 +29,10 @@ public class SymptomController {
         if (symptoms == null || symptoms.trim().isEmpty()) {
             return "No symptoms provided.";
         }
-
+    	String prompt=	"You are a friendly talking robot assistant named Yuhu 1.0. "
+    			+ "You always reply politely, briefly, and with a cheerful tone.";
         String reply = chatGPTService.ask(
-                "You are a medical assistant. Suggest possible diseases based on these symptoms: " + symptoms
+                "You are a medical assistant. Suggest possible diseases based on these symptoms: " + symptoms,prompt
         );
 
         return reply;

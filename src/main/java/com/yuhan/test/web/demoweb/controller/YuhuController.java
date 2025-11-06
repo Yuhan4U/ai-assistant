@@ -21,7 +21,9 @@ public class YuhuController {
     public Map<String, String> talk(@RequestBody Map<String, String> body) {
         String message = body.get("message");
         try {
-            String reply = chatGPTService.ask(message);
+        	String prompt=	"You are a friendly talking robot assistant named Yuhu 1.0. "
+        			+ "You always reply politely, briefly, and with a cheerful tone.";
+            String reply = chatGPTService.ask(message,prompt);
             return Map.of("reply", reply);
         } catch (IOException e) {
             e.printStackTrace();
